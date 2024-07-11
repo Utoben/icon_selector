@@ -59,10 +59,13 @@ def add_images_page(request):
 
 def choise(request):
     if request.method == 'POST':
+        print(request)
         image_id = request.POST.get('image_id')
         image = Image.objects.get(id=image_id)
         image.is_choised = True
         image.save()
-        return JsonResponse({'image': image.is_choised}, {'success': True,})
+
+        print(f'Картинка {image.pk} выбрана: {image.is_choised}')
+        return JsonResponse({'success': True,})
     else:
         return JsonResponse({'success': False})

@@ -15,11 +15,24 @@
     <a href="{% url 'add_images'%}" class="">Добавить картинки</a>
     <div id="#images-container">
         <h1>Картинки:</h1>
+        <div class="row">
         {% for image in images %}
             {% if image.image %}
-                <img src="{{image.image}}" width="100" alt="Image">
+            
+                <div class="col-md-2">
+                    <div class="form-control">
+                        <img src="{{image.image}}" width="100" alt="Image">
+                        <form action="" method="post" id="choose_image_form">
+                            {% csrf_token %}
+                            <input class="form-check-input" type="checkbox" name="choosed_image" onchange="choosed({{image.id}})" value="false">
+                        </form>
+                    </div>
+                </div>
+            
             {% endif %}
         {% endfor %}
+    </div>
+            
     </div>
     <form action="" method="post" id="add_image_form" enctype="multipart/form-data">
         {% csrf_token %}
@@ -27,36 +40,56 @@
         <button type="button" onclick="addImages()">Добавить картинки</button>
     </form>
 
-    <!--   Core JS Files   -->
+    <!--   Core JS   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function addImages(event) {
-        //   event.preventDefault();
-        var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
-        var formData = new FormData($('#add_image_form')[0]);
-          // formData.append('image_list', taskId);
-        
-          $.ajax({
-              url: '/add_images/',
-              type: 'POST',
-              data: formData,
-              processData: false,
-              contentType: false,
-              beforeSend: function(xhr) {
-                xhr.setRequestHeader('X-CSRFToken', csrfToken);
-              },
-              success: function(response) {
-                  // Обработка успешного обновления записи
-                  $('#images-container').html(response.html);
-                  // location.reload();
-  
-                  console.log("success " + response.message)
-              },
-              error: function(xhr, status, error) {
-                  // Обработка ошибки
-                  console.log("No success", error)
-              }
-          });
+            //   event.preventDefault();
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+            var formData = new FormData($('#add_image_form')[0]);
+            $.ajax({
+                url: '/add_images/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                },
+                success: function(response) {
+                    // $('#images-container').html(response.html);
+                    location.reload();
+                    console.log("success " + response.message)
+                },
+                error: function(xhr, status, error) {
+                    console.log("No success", error)
+                }
+            });
+        }
+    </script>
+    <script>
+        function choosed(image_id) {
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+            var formData = new FormData($('#choose_image_form')[0]);
+            formData.append('image_id', image_id);
+            $.ajax({
+                url: '/choise/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                },
+                success: function(response) {
+                    // $('#images-container').html(response.html);
+                    // location.reload();
+                    console.log("success " + response.success)
+                },
+                error: function(xhr, status, error) {
+                    console.log("No success", error)
+                }
+            });
         }
     </script>
 </body>
