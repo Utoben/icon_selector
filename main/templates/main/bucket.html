@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Document</title>
+</head>
+<body>
+
+    <a href="{% url 'home'%}" class="">Главная</a>
+
+    <div id="#images-container">
+        <h1>Ваши значки:</h1>
+        <div class="row">
+        {% for icon in icons %}
+            {% if icon.image %}
+            
+                <div class="col-md-2">
+                    <div class="form-control">
+                        <img src="{{icon.image}}" width="100" alt="Image">
+                    </div>
+                </div>
+            
+            {% endif %}
+        {% endfor %}
+    </div>
+    <form action="" method="post" id="clear_icons">
+        {% csrf_token %}
+        <button type="button" onclick="clearBucket()">Очистить корзину</button>
+    </form>
+
+    <!--   Core JS   -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function clearBucket(event) {
+            //   event.preventDefault();
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+            var formData = new FormData($('#clear_icons')[0]);
+            $.ajax({
+                url: '/clear_bucket/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                },
+                success: function(response) {
+                    location.reload();
+                    console.log("success " + response.success)
+                },
+                error: function(xhr, status, error) {
+                    console.log("No success", error)
+                }
+            });
+        }
+    </script>
+</body>
+</html>

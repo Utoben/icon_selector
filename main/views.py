@@ -57,9 +57,21 @@ def add_images_page(request):
 
     return render(request, 'main/add.html', context)
 
+def bucket(request):
+    error = ''
+    title = 'Ваши значки'
+
+    icons = Image.objects.filter(is_choised=True)
+
+    context = {
+        'title': title,
+        'error': error,
+        'icons': icons,
+    }
+    return render(request, 'main/bucket.html', context)
+
 def choise(request):
     if request.method == 'POST':
-        print(request)
         image_id = request.POST.get('image_id')
         image = Image.objects.get(id=image_id)
         image.is_choised = True
@@ -69,3 +81,19 @@ def choise(request):
         return JsonResponse({'success': True,})
     else:
         return JsonResponse({'success': False})
+    
+
+def clear_bucket(request):
+    if request.method == 'POST':
+        icons = Image.objects.filter(is_choised=True)
+        for icon in icons:
+            icon.is_choised = False
+            icon.save()
+        print(f'Корзина очищена')
+        return JsonResponse({'success': True,})
+    else:
+        return JsonResponse({'success': False})
+
+
+        
+  

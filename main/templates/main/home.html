@@ -12,7 +12,8 @@
     {% if request.user.is_authenticated and request.user.is_staff %}
         <a href="/admin" class="">Admin</a>
     {% endif %}
-    <a href="{% url 'add_images'%}" class="">Добавить картинки</a>
+    <!-- <a href="{% url 'add_images'%}" class="">Добавить картинки</a> -->
+    <a href="{% url 'bucket'%}" class="">Корзина</a>
     <div id="#images-container">
         <h1>Картинки:</h1>
         <div class="row">
@@ -57,7 +58,6 @@
                   xhr.setRequestHeader('X-CSRFToken', csrfToken);
                 },
                 success: function(response) {
-                    // $('#images-container').html(response.html);
                     location.reload();
                     console.log("success " + response.message)
                 },
@@ -82,7 +82,6 @@
                   xhr.setRequestHeader('X-CSRFToken', csrfToken);
                 },
                 success: function(response) {
-                    // $('#images-container').html(response.html);
                     // location.reload();
                     console.log("success " + response.success)
                 },
