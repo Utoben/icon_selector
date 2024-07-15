@@ -4,8 +4,7 @@ from django.http import Http404, HttpResponse, HttpResponseNotAllowed, HttpRespo
 
 from django.contrib.auth.decorators import permission_required, login_required
 
-from django.core.mail import send_mail
-
+from .tasks import *
 from .forms import *
 from .models import *
 from .utils import *
@@ -62,11 +61,13 @@ def bucket(request):
     title = 'Ваши значки'
 
     icons = Image.objects.filter(is_choised=True)
+    count = Image.objects.filter(is_choised=True).count
 
     context = {
         'title': title,
         'error': error,
         'icons': icons,
+        'count': count,
     }
     return render(request, 'main/bucket.html', context)
 
@@ -94,6 +95,18 @@ def clear_bucket(request):
     else:
         return JsonResponse({'success': False})
 
+def send_order(request):
+    if request.method == 'POST':
+        fullname = request.POST.get('fullname')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        
+        print(f'Пришли: {fullname} {phone} {email}')
 
+        long_send_order_email(fullname, phone, email)
+        
+        return JsonResponse({'success': True,})
+    else:
+        return JsonResponse({'success': False})
         
   

@@ -9,38 +9,47 @@
     <title>Document</title>
 </head>
 <body>
-    {% if request.user.is_authenticated and request.user.is_staff %}
-        <a href="/admin" class="">Admin</a>
-    {% endif %}
+    <div class="navbar">
+        {% if request.user.is_authenticated and request.user.is_staff %}
+            <a href="/admin" class="">Admin</a>
+        {% endif %}
+        <a href="{% url 'bucket'%}" class="">Корзина</a>
+    </div>
     <!-- <a href="{% url 'add_images'%}" class="">Добавить картинки</a> -->
-    <a href="{% url 'bucket'%}" class="">Корзина</a>
-    <div id="#images-container">
-        <h1>Картинки:</h1>
-        <div class="row">
-        {% for image in images %}
-            {% if image.image %}
-            
-                <div class="col-md-2">
-                    <div class="form-control">
-                        <img src="{{image.image}}" width="100" alt="Image">
-                        <form action="" method="post" id="choose_image_form">
-                            {% csrf_token %}
-                            <input class="form-check-input" type="checkbox" name="choosed_image" onchange="choosed({{image.id}})" value="false">
-                        </form>
-                    </div>
-                </div>
-            
-            {% endif %}
-        {% endfor %}
+    
+    <div class="card" id="images_container">
+        <div class="card-title">
+            <h1>Картинки:</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for image in images %}
+                    {% if image.image %}
+                        <div class="col-md-2">
+                            <div class="form-control">
+                                <img src="{{image.image}}" width="100" alt="Image">
+                                <form action="" method="post" id="choose_image_form">
+                                    {% csrf_token %}
+                                    <input class="form-check-input" type="checkbox" name="choosed_image" onchange="choosed({{image.id}})" value="false">
+                                </form>
+                            </div>
+                        </div>
+                    
+                    {% endif %}
+                {% empty %}
+                    <h3>Еще нет значков</h3>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-            
-    </div>
+
     <form action="" method="post" id="add_image_form" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="file" class="btn btn-round btn-facebook btn-sm" id="image_button_id" name="image_list" multiple>
-        <button type="button" onclick="addImages()">Добавить картинки</button>
+        <button type="button" class="btn btn-fill btn-primary" onclick="addImages()">Добавить картинки</button>
     </form>
 
+    <div class="card" id=""></div>
     <!--   Core JS   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
