@@ -27,11 +27,16 @@
                     {% if image.image %}
                         <div class="col-md-2">
                             <div class="form-control">
-                                <img src="{{image.image}}" width="100" alt="Image">
-                                <form action="" method="post" id="choose_image_form">
-                                    {% csrf_token %}
-                                    <input class="form-check-input" type="checkbox" name="choosed_image" onchange="choosed({{image.id}})" value="false">
-                                </form>
+                                {% if image in choised_icons %}
+                                    <img src="{{image.image}}" width="100" alt="Image">
+                                    <h6>Уже выбран</h6>
+                                {% else %}
+                                    <img src="{{image.image}}" width="100" alt="Image">
+                                    <form action="" method="post" id="choose_image_form">
+                                        {% csrf_token %}
+                                        <input class="form-check-input" type="checkbox" name="choosed_image" onchange="choosed({{image.id}})" value="false">
+                                    </form>
+                                {% endif %}
                             </div>
                         </div>
                     

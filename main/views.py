@@ -17,9 +17,13 @@ def home(request):
     title = 'Выберите изображения'
     images = Image.objects.all()
 
+    user_profile = UserProfile.objects.get(user=request.user)
+    choised_icons = user_profile.chosen_images.all()
+
     context = {
         'title': title,
         'images': images,
+        'choised_icons': choised_icons,
     }
 
     return render(request, 'main/home.html', context)
@@ -60,8 +64,9 @@ def bucket(request):
     error = ''
     title = 'Ваши значки'
 
-    icons = Image.objects.filter(is_choised=True)
-    count = Image.objects.filter(is_choised=True).count
+    user_profile = UserProfile.objects.get(user=request.user)
+    icons = user_profile.chosen_images.all()
+    count = icons.count()
 
     context = {
         'title': title,
@@ -72,24 +77,26 @@ def bucket(request):
     return render(request, 'main/bucket.html', context)
 
 def choise(request):
+    user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
-        image_id = request.POST.get('image_id')
-        image = Image.objects.get(id=image_id)
-        image.is_choised = True
-        image.save()
+        try:
+            image_id = request.POST.get('image_id')
+            image = Image.objects.get(id=image_id)
+            user_profile.chosen_images.add(image)
+            user_profile.save()
 
-        print(f'Картинка {image.pk} выбрана: {image.is_choised}')
-        return JsonResponse({'success': True,})
+            print(f'Картинка {image.pk} выбрана: {image.is_choised}')
+            return JsonResponse({'success': True,})
+        except Image.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Image not found'})
     else:
         return JsonResponse({'success': False})
     
 
 def clear_bucket(request):
     if request.method == 'POST':
-        icons = Image.objects.filter(is_choised=True)
-        for icon in icons:
-            icon.is_choised = False
-            icon.save()
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_profile.chosen_images.clear()
         print(f'Корзина очищена')
         return JsonResponse({'success': True,})
     else:
