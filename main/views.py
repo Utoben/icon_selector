@@ -28,7 +28,7 @@ def home(request):
 
     return render(request, 'main/landing-page.html', context)
 
-def add_images(request):
+def add_images(request) -> JsonResponse:
 
     if request.method == "POST":
         print(request)
@@ -76,7 +76,7 @@ def bucket(request):
     }
     return render(request, 'main/bucket.html', context)
 
-def choise(request):
+def choise(request) -> JsonResponse:
     user_profile = UserProfile.objects.get(user=request.user)
     if request.method == 'POST':
         try:
@@ -93,7 +93,7 @@ def choise(request):
         return JsonResponse({'success': False})
     
 
-def clear_bucket(request):
+def clear_bucket(request) -> JsonResponse:
     if request.method == 'POST':
         user_profile = UserProfile.objects.get(user=request.user)
         user_profile.chosen_images.clear()
@@ -102,18 +102,37 @@ def clear_bucket(request):
     else:
         return JsonResponse({'success': False})
 
-def send_order(request):
+# отправка заказа
+def send_order(request) -> JsonResponse:
     if request.method == 'POST':
         fullname = request.POST.get('fullname')
         phone = request.POST.get('phone')
         email = request.POST.get('email')
+
+        icons = get_userprofile(request.user)
+        print(f'ИКОНКИ: {icons}')
+
+        icons_names = get_icons_names(icons)
+        print(f'ИКОНКИ: {icons_names}')
+
+        count = icons.count()
         
         print(f'Пришли: {fullname} {phone} {email}')
 
-        long_send_order_email(fullname, phone, email)
-        
-        return JsonResponse({'success': True,})
+        # отправка письма заказчику
+        long_send_customer_email(fullname, phone, email, count)
+        # отправка письма исполнителю
+        long_send_order_email(email, icons_names, count)
+
+        return JsonResponse({'success': True})
     else:
         return JsonResponse({'success': False})
         
-  
+# выбор имен заказаных изображений
+def get_icons_names(icons: list[Image]) -> list[str]:
+    return [icon.file_name for icon in icons]
+
+# получение профиля пользователя
+def get_userprofile(user) -> list[Image]:
+    user_profile = UserProfile.objects.get(user=user)
+    return user_profile.chosen_images.all()
