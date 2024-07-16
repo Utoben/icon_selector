@@ -26,7 +26,7 @@ def home(request):
         'choised_icons': choised_icons,
     }
 
-    return render(request, 'main/home.html', context)
+    return render(request, 'main/landing-page.html', context)
 
 def add_images(request):
 
