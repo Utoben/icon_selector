@@ -2,6 +2,6 @@
     "objectscript.conn": {
         "server": "eis-4",
         "ns": "LMDC",
-        "active": true
+        "active": false
     }
 }
