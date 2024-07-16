@@ -25,7 +25,7 @@
   <nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="300">
     <div class="container">
       <div class="navbar-translate">
-        <a class="navbar-brand" href="https://demos.creative-tim.com/paper-kit/index.html" rel="tooltip" title="Coded by Creative Tim" data-placement="bottom" target="_blank">
+        <a class="navbar-brand" href="https://demos.creative-tim.com/paper-kit/index.html" rel="tooltip" title="" data-placement="bottom" target="_blank">
           Империя значков
         </a>
         <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,30 +45,6 @@
           <li class="nav-item">
             <a href="{% url 'bucket'%}" class="nav-link" rel="tooltip" title="Бегом в корзину" data-placement="bottom">Корзина</a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="Follow us on Twitter" data-placement="bottom" href="https://twitter.com/CreativeTim" target="_blank">
-              <i class="fa fa-twitter"></i>
-              <p class="d-lg-none">Twitter</p>
-            </a>
-          </li> -->
-          <!-- <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="Like us on Facebook" data-placement="bottom" href="https://www.facebook.com/CreativeTim" target="_blank">
-              <i class="fa fa-facebook-square"></i>
-              <p class="d-lg-none">Facebook</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="Follow us on Instagram" data-placement="bottom" href="https://www.instagram.com/CreativeTimOfficial" target="_blank">
-              <i class="fa fa-instagram"></i>
-              <p class="d-lg-none">Instagram</p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" rel="tooltip" title="Star on GitHub" data-placement="bottom" href="https://www.github.com/CreativeTimOfficial" target="_blank">
-              <i class="fa fa-github"></i>
-              <p class="d-lg-none">GitHub</p>
-            </a>
-          </li> -->
         </ul>
       </div>
     </div>
@@ -159,9 +135,9 @@
             {% if image in choised_icons %}
               <div class="col-md-2">
                 <div class="card card-profile card-plain">
-                  <div class="card-avatar">
+                  <div class="card">
                     <a href="#avatar">
-                      <img src="{{image.image}}" alt="...">
+                      <img class="img-rounded img-responsive" src="{{image.image}}" alt="...">
                     </a>
                   </div>
                   <div class="card-body">
@@ -176,17 +152,16 @@
                     </p>
                   </div>
                   <div class="card-footer text-center">
-                    
+                    <h6><b>Уже выбран</b></h6>
                   </div>
                 </div>
               </div>
-              <h6>Уже выбран</h6>
             {% else %}
               <div class="col-md-2">
                 <div class="card card-profile card-plain">
-                  <div class="card-avatar">
+                  <div class="card">
                     <a href="#avatar">
-                      <img src="{{image.image}}" alt="...">
+                      <img src="{{image.image}}" class="img-rounded img-responsive" alt="...">
                     </a>
                   </div>
                   <div class="card-body">
@@ -218,7 +193,7 @@
         </div>
       </div>
     </div>
-    <div class="section landing-section">
+    <!-- <div class="section landing-section">
       <div class="container">
         <div class="row">
           <div class="col-md-8 ml-auto mr-auto">
@@ -259,7 +234,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
   <footer class="footer   footer-white ">
     <div class="container">
@@ -267,22 +242,17 @@
         <nav class="footer-nav">
           <ul>
             <li>
-              <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>
-            </li>
-            <li>
-              <a href="http://blog.creative-tim.com/" target="_blank">Blog</a>
-            </li>
-            <li>
-              <a href="https://www.creative-tim.com/license" target="_blank">Licenses</a>
+              <!-- <a href="http://blog.creative-tim.com/" target="_blank">Blog</a> -->
             </li>
           </ul>
         </nav>
         <div class="credits ml-auto">
           <span class="copyright">
-            ©
+            <!-- © -->
             <script>
               document.write(new Date().getFullYear())
-            </script>, made with <i class="fa fa-heart heart"></i> by Creative Tim
+            </script> Империя значков
+            <!-- , made with <i class="fa fa-heart heart"></i> -->
           </span>
         </div>
       </div>
