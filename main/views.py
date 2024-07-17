@@ -140,8 +140,8 @@ def send_order(request) -> JsonResponse:
         return JsonResponse({'success': False})
         
 # выбор имен заказаных изображений
-def get_icons_names(icons: list[Image]) -> list[str]:
-    return [icon.file_name for icon in icons]
+def get_icons_names(icons: list[Image]) -> str:
+    return ', '.join([icon.file_name for icon in icons]) if icons else ''
 
 # получение профиля пользователя
 def get_userprofile(user) -> list[Image]:

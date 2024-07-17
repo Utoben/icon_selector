@@ -10,7 +10,9 @@ def long_send_customer_email(fullname, phone, to_email, count):
     
     # q = Queue(connection=redis_conn)
     # job = q.enqueue(send_email, subject, message, from_email, [to_email])
+    print(f'отправка начата long_send_customer_email')
     send_mail(subject, message, from_email, [to_email])
+    print(f'отправка закончена long_send_customer_email')
     
 # отправка письма исполнителю
 def long_send_order_email(to_email, icons, count):
