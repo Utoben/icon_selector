@@ -92,6 +92,17 @@ def choise(request) -> JsonResponse:
     else:
         return JsonResponse({'success': False})
     
+def get_profile_info(request) -> JsonResponse:
+    if request.method == 'GET':
+        user_profile = UserProfile.objects.get(user=request.user)
+        fullname = f'{user_profile.surname} {user_profile.name} {user_profile.patronymic}'
+        phone = f'{user_profile.phone}'
+        email = f'{user_profile.email}'
+        print(f'Инфо по профилю передана: {fullname} {phone} {email}')
+
+        return JsonResponse({'success': True, 'fullname': fullname, 'phone': phone, 'email': email,})
+    else:
+        return JsonResponse({'success': False})
 
 def clear_bucket(request) -> JsonResponse:
     if request.method == 'POST':

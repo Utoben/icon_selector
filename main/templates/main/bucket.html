@@ -95,7 +95,7 @@
                                                   <i class="nc-icon nc-single-02"></i>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control" name="fullname">
+                                            <input type="text" class="form-control" name="fullname" placeholder="Иванов Иван Иванович">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -122,7 +122,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4 ml-auto mr-auto">
+                                    <div class="col-md-2 ml-auto mr-auto">
                                         <button type="button" class="btn btn-lg btn-fill btn-primary" onclick="sendOrder()">Отправить</button>
                                     </div>
                                 </div>
@@ -130,6 +130,11 @@
                         </div>
                     </div>   
                 </div>
+            </div>
+            <div class="col-md-2 ml-auto mr-auto">
+                <form class="form" method="get" id="update_profile_data" class="mt-4"></form>
+                    <button type="button" class="btn btn-outline-warning btn-round" onclick="getProfileInfo()">Подтянем информацию из профиля?</button>
+                </form>
             </div>
         </div>
     </div>
@@ -175,6 +180,33 @@
                 success: function(response) {
                     location.reload();
                     console.log("success " + response.success)
+                },
+                error: function(xhr, status, error) {
+                    console.log("No success", error)
+                }
+            });
+        }
+
+        // тянем инфо из профиля
+        function getProfileInfo(event) {
+            //   event.preventDefault();
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+            var formData = new FormData($('#update_profile_data')[0]);
+            $.ajax({
+                url: '/get_profile_info/',
+                type: 'GET',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                },
+                success: function(response) {
+                    // location.reload();
+                    console.log("success " + response.success)
+                    $('input[name="fullname"]').val(response.fullname);
+                    $('input[name="phone"]').val(response.phone);
+                    $('input[name="email"]').val(response.email);
                 },
                 error: function(xhr, status, error) {
                     console.log("No success", error)

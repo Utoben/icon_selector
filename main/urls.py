@@ -17,6 +17,7 @@ urlpatterns = [
     path('choise/', views.choise, name='choise'),
     path('clear_bucket/', views.clear_bucket, name='clear_bucket'),
     path('send_order/', views.send_order, name='send_order'),
+    path('get_profile_info/', views.get_profile_info, name='get_profile_info'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
