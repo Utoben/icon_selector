@@ -3,6 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.http import Http404, HttpResponse, HttpResponseNotAllowed, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
 
 from django.contrib.auth.decorators import permission_required, login_required
+from django.contrib.auth import views as auth_views
 
 from .tasks import *
 from .forms import *
@@ -13,6 +14,7 @@ from .utils import *
 def custom_404(request):
     return render(request, 'main/404.html', status=404)
 
+@login_required
 def home(request):
     title = 'Выберите изображения'
     images = Image.objects.all()
@@ -26,7 +28,7 @@ def home(request):
         'choised_icons': choised_icons,
     }
 
-    return render(request, 'main/landing-page.html', context)
+    return render(request, 'main/home.html', context)
 
 def add_images(request) -> JsonResponse:
 
@@ -60,6 +62,7 @@ def add_images_page(request):
 
     return render(request, 'main/add.html', context)
 
+@login_required
 def bucket(request):
     error = ''
     title = 'Ваши значки'
@@ -147,3 +150,7 @@ def get_icons_names(icons: list[Image]) -> str:
 def get_userprofile(user) -> list[Image]:
     user_profile = UserProfile.objects.get(user=user)
     return user_profile.chosen_images.all()
+
+class CustomLoginView(auth_views.LoginView):
+    authentication_form = CustomAuthenticationForm
+    template_name = 'registration/login.html'

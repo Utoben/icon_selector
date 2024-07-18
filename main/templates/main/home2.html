@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static 'img//apple-icon.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'img//favicon.png' %}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Главная</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+     <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <!-- CSS Files -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/paper-kit.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <div class="navbar">
+        {% if request.user.is_authenticated and request.user.is_staff %}
+            <a href="/admin" class="">Admin</a>
+        {% endif %}
+        <a href="{% url 'bucket'%}" class="">Корзина</a>
+    </div>
+    <!-- <a href="{% url 'add_images'%}" class="">Добавить картинки</a> -->
+    
+    <div class="card" id="images_container">
+        <div class="card-title">
+            <h1>Картинки:</h1>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for image in images %}
+                    {% if image.image %}
+                        <div class="col-md-2">
+                            <div class="form-control">
+                                {% if image in choised_icons %}
+                                    <img src="{{image.image}}" width="160" alt="Image">
+                                    <h6>Уже выбран</h6>
+                                {% else %}
+                                    <img src="{{image.image}}" width="160" alt="Image">
+                                    <form action="" method="post" id="choose_image_form">
+                                        {% csrf_token %}
+                                        <input class="form-check-input" type="checkbox" name="choosed_image" onchange="choosed({{image.id}})" value="false">
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    
+                    {% endif %}
+                {% empty %}
+                    <h3>Еще нет значков</h3>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <form action="" method="post" id="add_image_form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" class="btn btn-round btn-facebook btn-sm" id="image_button_id" name="image_list" multiple>
+        <button type="button" class="btn btn-fill btn-primary" onclick="addImages()">Добавить картинки</button>
+    </form>
+
+    <div class="card" id=""></div>
+    <!--   Core JS   -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function addImages(event) {
+            //   event.preventDefault();
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+            var formData = new FormData($('#add_image_form')[0]);
+            $.ajax({
+                url: '/add_images/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                },
+                success: function(response) {
+                    location.reload();
+                    console.log("success " + response.message)
+                },
+                error: function(xhr, status, error) {
+                    console.log("No success", error)
+                }
+            });
+        }
+    </script>
+    <script>
+        function choosed(image_id) {
+            var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+            var formData = new FormData($('#choose_image_form')[0]);
+            formData.append('image_id', image_id);
+            $.ajax({
+                url: '/choise/',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                },
+                success: function(response) {
+                    // location.reload();
+                    console.log("success " + response.success)
+                },
+                error: function(xhr, status, error) {
+                    console.log("No success", error)
+                }
+            });
+        }
+    </script>
+</body>
+</html>
